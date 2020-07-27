@@ -1,11 +1,13 @@
 '''
-        SR1 Points
+        SR3 Obj Models
 
 Creado por:
 
     Juan Fernando De Leon Quezada   Carne 17822
 
-Bitmap Class
+- Bitmap Class
+
+- Obj File Reader Class
 
 '''
 
@@ -30,6 +32,31 @@ def color(r,g,b):
     '''Set pixel color'''
 
     return bytes([b, g, r])
+
+class ObjFileReader(object):
+    '''Obj File Reader'''
+    
+    def __init__(self, filename):
+        '''Constructor'''
+        #Open and read .obj file
+        with open(filename) as obj_file:
+            self.lines = obj_file.read().splitlines()
+        
+        self.vertices = []
+        self.faces = []
+
+        #Reads individual lines from .obj file
+        self.readLines()
+    
+    def readLines(self):
+        '''Read individual lines from .obj file'''
+        
+        for line in self.lines:
+            if line:
+                prefix, value = line.splt(' ', 1)
+                if prefix == 'v':
+                    
+
 
 class Bitmap(object):
     '''Bitmap Class'''
