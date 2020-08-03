@@ -10,6 +10,7 @@ Creado por:
 '''
 
 import struct
+from obj import ObjReader
 
 def char(c):
     '''1 Byte'''
@@ -40,7 +41,7 @@ class Bitmap(object):
         self.height = height
         self.width = width
         self.framebuffer = []
-        self.clear_color = color(255, 255, 255)
+        self.clear_color = color(0, 0, 0)
         self.vertex_color = color(255, 0, 0)
         self.glClear()
 
@@ -183,6 +184,29 @@ class Bitmap(object):
                     j = i
                 if draw_point:
                     self.glPoint((float(x)/(float(self.width)/2))-1,(float(y)/(float(self.height)/2))-1,self.vertex_color)
+
+    def glLoadObjModel(self, file_name, translate=(0,0), scale=(1,1)):
+        '''Load and Render .obj file'''
+        #Reads .obj file
+        model = ObjReader(file_name)
+        model.readLines()
+        
+        for face in model.faces:
+            vertices_ctr = len(face)
+            for j in range(vertices_ctr):
+                f1 = face[j][0]
+                f2 = face[(j+1) % vertices_ctr][0]
+                
+                v1 = model.vertices[f1 - 1]
+                v2 = model.vertices[f2 - 1]
+
+                x1 = (v1[0] + translate[0]) * scale[0]
+                y1 = (v1[1] + translate[1]) * scale[1]
+                x2 = (v2[0] + translate[0]) * scale[0]
+                y2 = (v2[1] + translate[1]) * scale[1]
+
+                self.glLine(x1, y1, x2, y2)
+
 
     def glWrite(self, file_name):
         '''Write Bitmap File'''
